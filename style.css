@@ -1,0 +1,76 @@
+:root {
+  --bg: #0f172a;          /* slate-900 */
+  --card: #111827;        /* gray-900 */
+  --text: #e5e7eb;        /* gray-200 */
+  --muted: #94a3b8;       /* slate-400 */
+  --accent: #22d3ee;      /* cyan-400 */
+  --accent-2: #06b6d4;    /* cyan-500 */
+  --success: #22c55e;     /* green-500 */
+  --error: #ef4444;       /* red-500 */
+  --border: #1f2937;      /* gray-800 */
+}
+
+* { box-sizing: border-box; }
+html, body { height: 100%; }
+
+body {
+  margin: 0;
+  background: radial-gradient(1200px 600px at 20% -10%, #0b1222 10%, var(--bg)), var(--bg);
+  color: var(--text);
+  font: 16px/1.5 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans";
+  padding: 24px;
+}
+
+header { max-width: 860px; margin: 0 auto 16px; }
+h1 { margin: 0 0 6px; font-size: 28px; }
+p { margin: 0 0 10px; color: var(--muted); }
+
+.tabs { display: flex; gap: 8px; max-width: 860px; margin: 12px auto; }
+.tab {
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 10px 14px;
+  border-radius: 12px;
+  cursor: pointer;
+}
+.tab.active { outline: 2px solid var(--accent); }
+
+main {
+  max-width: 860px;
+  margin: 0 auto;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+form { display: grid; gap: 12px; }
+.field { display: grid; gap: 6px; }
+label { color: var(--text); }
+input, textarea, button {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: #0b1222;
+  color: var(--text);
+}
+textarea { min-height: 120px; resize: vertical; }
+button {
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  color: #001015;
+  font-weight: 700;
+  cursor: pointer;
+  border: none;
+}
+.hint { color: var(--muted); font-size: 14px; }
+
+.result { margin-top: 8px; font-weight: 600; }
+.result.success { color: var(--success); }
+.result.error { color: var(--error); }
+
+footer { max-width: 860px; margin: 16px auto 0; color: var(--muted); }

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Southampton Reporting – Tobacco & Vapes</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <header>
+    <h1>Report a Trading Standards Breach</h1>
+    <p>Use this page to report suspected breaches related to tobacco and vaping products.</p>
+  </header>
+
+  <nav class="tabs">
+    <button class="tab active" data-tab="report">Report</button>
+    <button class="tab" data-tab="tobacco">Tobacco Law Info</button>
+    <button class="tab" data-tab="vapes">Vape Law Info</button>
+    <button class="tab" data-tab="privacy">Privacy</button>
+  </nav>
+
+  <main>
+    <!-- Report -->
+    <section id="tab-report" class="tab-panel active">
+      <form id="reportForm">
+        <div class="field">
+          <label>Your name (optional)</label>
+          <input name="name" placeholder="Jane Doe" />
+        </div>
+
+        <div class="field">
+          <label>Email (optional)</label>
+          <input name="email" type="email" placeholder="jane@example.com" />
+        </div>
+
+        <div class="field">
+          <label>Describe the issue *</label>
+          <textarea name="details" required placeholder="What happened? When and where? Any seller details?"></textarea>
+        </div>
+
+        <div class="field">
+          <label>Photo (optional)</label>
+          <input name="photo" type="file" accept="image/*" />
+        </div>
+
+        <button type="submit">Send report</button>
+        <p class="hint">By submitting, you agree to our Privacy section.</p>
+      </form>
+
+      <div id="result" class="result" role="status" aria-live="polite"></div>
+    </section>
+
+    <!-- Tobacco info -->
+    <section id="tab-tobacco" class="tab-panel">
+      <h2>Tobacco Law – Key Points (UK)</h2>
+      <ul>
+        <li>Age restriction: no sales to under 18s.</li>
+        <li>Health warnings required; no single cigarettes.</li>
+        <li>Illicit/counterfeit tobacco sales are illegal.</li>
+        <li>Advertising and promotion are heavily restricted.</li>
+      </ul>
+      <p class="hint">This is a simplified summary, not legal advice.</p>
+    </section>
+
+    <!-- Vapes info -->
+    <section id="tab-vapes" class="tab-panel">
+      <h2>Vapes & E‑cigarettes – Key Points (UK)</h2>
+      <ul>
+        <li>No sales to under 18s.</li>
+        <li>Limits on nicotine strength and tank size for nicotine products.</li>
+        <li>Packaging and health warnings required; some ads restricted.</li>
+        <li>Non‑compliant or counterfeit devices/liquids must not be sold.</li>
+      </ul>
+      <p class="hint">Always check the latest local Trading Standards guidance.</p>
+    </section>
+
+    <!-- Privacy -->
+    <section id="tab-privacy" class="tab-panel">
+      <h2>Privacy</h2>
+      <p>We collect details you provide (and your IP address) to investigate reports. Photos are optional. We store data securely and may share with relevant authorities where necessary.</p>
+      <p>To request removal or correction of your data, contact: <strong>tradingstandards@example.org</strong></p>
+    </section>
+  </main>
+
+  <footer>
+    <small>&copy; 2025 Southampton Reporting</small>
+  </footer>
+
+  <script src="/script.js"></script>
+</body>
+</html>

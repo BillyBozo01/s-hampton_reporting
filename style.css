@@ -1,13 +1,26 @@
 :root {
-  --bg: #0f172a;          /* keep deep background for contrast */
-  --card: #111827;        /* dark card background */
-  --text: #f8f9fa;        /* near-white for readability */
-  --muted: #cbd5e1;       /* soft gray for secondary text */
-  --accent: #d71920;      /* Southampton red (primary) */
-  --accent-2: #b5121b;    /* deeper Southampton red for gradient */
-  --success: #22c55e;     /* keep green for status */
-  --error: #ef4444;       /* bright red for errors (can keep separate from accent) */
-  --border: #1f2937;      /* dark border */
+  --bg: #ffffff;          /* white base, matches home kit */
+  --card: #f8f8f8;        /* light gray for cards */
+  --text: #111111;        /* near-black text for contrast */
+  --muted: #555555;       /* muted dark gray for secondary text */
+  --accent: #d71920;      /* Southampton primary red */
+  --accent-2: #b5121b;    /* deeper Southampton red for gradient/shadows */
+  --success: #2e8540;     /* green for success */
+  --error: #d71920;       /* same as accent for branding consistency */
+  --border: #cccccc;      /* light border */
+}
+
+body {
+  margin: 0;
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji";
+  background: radial-gradient(80% 80% at 50% 0%, #ffffff 0%, #f1f1f1 70%);
+  color: var(--text);
+}
+
+input, textarea {
+  background: #ffffff;
+  border: 1px solid var(--border);
+  color: var(--text);
 }
 
 

@@ -103,15 +103,15 @@ def home():
 def reporting():
     return _send_html("reporting.html")
 
-@app.get("/gdpr")
+@app.get("/gdpr.html")
 def gdpr():
     return _send_html("gdpr.html")
 
-@app.get("/tobaccoinfo")
+@app.get("/tobaccoinfo.html")
 def tobaccoinfo():
     return _send_html("tobaccoinfo.html")
 
-@app.get("/vapesinfo")
+@app.get("/vapesinfo.html")
 def vapesinfo():
     return _send_html("vapesinfo.html")
 

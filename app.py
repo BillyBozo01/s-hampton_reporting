@@ -24,6 +24,36 @@ app = Flask(__name__, static_folder=None)
 # -------------------------------------------------
 # Database
 # -------------------------------------------------
+# debugging 
+import os
+from flask import Response, escape
+
+# Where is Flask looking?
+@app.get("/_where")
+def _where():
+    return Response(f"FRONTEND_DIR = {FRONTEND_DIR}", mimetype="text/plain")
+
+# List files Flask can see in that folder (first 200 entries)
+@app.get("/_ls")
+def _ls():
+    try:
+        files = sorted(os.listdir(FRONTEND_DIR))[:200]
+        lines = [f"{'✓' if os.path.isfile(os.path.join(FRONTEND_DIR, f)) else '✗'}  {f}" for f in files]
+        body = "Listing FRONTEND_DIR:\n" + "\n".join(lines)
+        return Response(body, mimetype="text/plain; charset=utf-8")
+    except Exception as e:
+        return Response(f"Error listing dir: {e}", mimetype="text/plain; charset=utf-8")
+
+# Catch-all for your HTML/CSS/JS (put this AFTER /style.css and /script.js)
+@app.get("/<path:filename>")
+def static_pages(filename):
+    path = os.path.join(FRONTEND_DIR, filename)
+    # Debug: show what’s being requested and if it exists
+    print(f"[static_pages] Request: {filename} -> {path} exists={os.path.isfile(path)}")
+    if os.path.isfile(path):
+        return send_from_directory(FRONTEND_DIR, filename)
+    return Response(f"Not found: {filename}\nLooked in: {FRONTEND_DIR}", status=404, mimetype="text/plain")
+
 def get_db():
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row

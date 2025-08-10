@@ -1,14 +1,15 @@
 :root {
-  --bg: #0f172a;          /* slate-900 */
-  --card: #111827;        /* gray-900 */
-  --text: #e5e7eb;        /* gray-200 */
-  --muted: #94a3b8;       /* slate-400 */
-  --accent: #22d3ee;      /* cyan-400 */
-  --accent-2: #06b6d4;    /* cyan-500 */
-  --success: #22c55e;     /* green-500 */
-  --error: #ef4444;       /* red-500 */
-  --border: #1f2937;      /* gray-800 */
+  --bg: #0f172a;          /* keep deep background for contrast */
+  --card: #111827;        /* dark card background */
+  --text: #f8f9fa;        /* near-white for readability */
+  --muted: #cbd5e1;       /* soft gray for secondary text */
+  --accent: #d71920;      /* Southampton red (primary) */
+  --accent-2: #b5121b;    /* deeper Southampton red for gradient */
+  --success: #22c55e;     /* keep green for status */
+  --error: #ef4444;       /* bright red for errors (can keep separate from accent) */
+  --border: #1f2937;      /* dark border */
 }
+
 
 * { box-sizing: border-box; }
 html, body { height: 100%; }

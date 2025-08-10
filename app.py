@@ -70,6 +70,11 @@ def style():
 def script():
     return send_from_directory(FRONTEND_DIR, "script.js")
 
+# ✅ Catch-all for other frontend files (HTML/CSS/JS in same folder)
+@app.get("/<path:filename>")
+def static_pages(filename):
+    return send_from_directory(FRONTEND_DIR, filename)
+
 # -------------------------------------------------
 # Uploads (images only, basic checks)
 # -------------------------------------------------

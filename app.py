@@ -134,31 +134,34 @@ def download_excel():
 def serve_upload(fname):
     return send_from_directory(UPLOAD_DIR, fname)
 
+
 # ---------------- Static / Frontend routes ----------------
 @app.get("/")
 def home():
     # Make reporting.html the homepage
     return redirect("/reporting.html", code=302)
 
+# Keep /index.html working even after the file is deleted
+@app.get("/index.html")
+def index_legacy():
+    return redirect("/reporting.html", code=301)
+
+# Explicit route for the reporting page
 @app.get("/reporting.html")
 def reporting_html():
     return _send_html("reporting.html")
 
-# Serve other html pages by name
+# Serve other .html pages by name
 @app.get("/<page>.html")
 def html_pages(page):
     pages = {
         "gdpr": "gdpr.html",
         "tobaccoinfo": "tobaccoinfo.html",
         "vapesinfo": "vapesinfo.html",
-        "index": "index.html",  # legacy; will redirect below
     }
     filename = pages.get(page)
-    if not filename or not os.path.exists(os.path.join(FRONTEND_DIR, filename)):
+    if not filename:
         return Response("Not found", status=404)
-    if filename == "index.html":
-        # Push legacy /index.html to /reporting.html
-        return redirect("/reporting.html", code=301)
     return _send_html(filename)
 
 # Legacy clean paths -> .html
@@ -187,12 +190,6 @@ def style_css():
 def script_js():
     return send_from_directory(FRONTEND_DIR, "script.js")
 
-@app.get("/favicon.ico")
-def favicon():
-    path = os.path.join(FRONTEND_DIR, "favicon.ico")
-    if os.path.exists(path):
-        return send_from_directory(FRONTEND_DIR, "favicon.ico")
-    return Response(status=204)
 
 # ---------------- Run ----------------
 if __name__ == "__main__":

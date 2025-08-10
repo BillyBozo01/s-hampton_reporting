@@ -11,89 +11,50 @@
     <h1>Report a Trading Standards Breach</h1>
     <p>Use this page to report suspected breaches related to tobacco and vaping products.</p>
   </header>
-  <nav class="tabs">
-  <a href="/" class="tab">Report</a>
-  <a href="/tobacco.html" class="tab">Tobacco Law Info</a>
-  <a href="/vapes.html" class="tab">Vape Law Info</a>
-  <a href="/privacy.html" class="tab">Privacy</a>
-</nav>
 
+  <!-- Only ONE nav, using links -->
   <nav class="tabs">
-    <button class="tab active" data-tab="report">Report</button>
-    <button class="tab" data-tab="tobacco">Tobacco Law Info</button>
-    <button class="tab" data-tab="vapes">Vape Law Info</button>
-    <button class="tab" data-tab="privacy">Privacy</button>
+    <a href="/" class="tab active">Report</a>
+    <a href="/tobacco.html" class="tab">Tobacco Law Info</a>
+    <a href="/vapes.html" class="tab">Vape Law Info</a>
+    <a href="/privacy.html" class="tab">Privacy</a>
   </nav>
 
   <main>
-    <div id="tab-content">
-      <!-- Report Section -->
-      <section id="tab-report" class="tab-panel active">
-        <form id="reportForm">
-          <div class="field">
-            <label>Your name (optional)</label>
-            <input name="name" placeholder="Jane Doe" />
-          </div>
+    <!-- Only the report form lives on index.html -->
+    <form id="reportForm">
+      <div class="field">
+        <label>Your name (optional)</label>
+        <input name="name" placeholder="Jane Doe" />
+      </div>
 
-          <div class="field">
-            <label>Email (optional)</label>
-            <input name="email" type="email" placeholder="jane@example.com" />
-          </div>
+      <div class="field">
+        <label>Email (optional)</label>
+        <input name="email" type="email" placeholder="jane@example.com" />
+      </div>
 
-          <div class="field">
-            <label>Describe the issue *</label>
-            <textarea name="details" required placeholder="What happened? When and where? Any seller details?"></textarea>
-          </div>
+      <div class="field">
+        <label>Describe the issue *</label>
+        <textarea name="details" required placeholder="What happened? When and where? Any seller details?"></textarea>
+      </div>
 
-          <div class="field">
-            <label>Photo (optional)</label>
-            <input name="photo" type="file" accept="image/*" />
-          </div>
+      <div class="field">
+        <label>Photo (optional)</label>
+        <input name="photo" type="file" accept="image/*" />
+      </div>
 
-          <button type="submit">Send report</button>
-          <p class="hint">By submitting, you agree to our Privacy section.</p>
-        </form>
+      <button type="submit">Send report</button>
+      <p class="hint">By submitting, you agree to our Privacy section.</p>
+    </form>
 
-        <div id="result" class="result" role="status" aria-live="polite"></div>
-      </section>
-
-      <!-- Tobacco Law Info Section -->
-      <section id="tab-tobacco" class="tab-panel">
-        <h2>Tobacco Law – Key Points (UK)</h2>
-        <ul>
-          <li>Age restriction: no sales to under 18s.</li>
-          <li>Health warnings required; no single cigarettes.</li>
-          <li>Illicit/counterfeit tobacco sales are illegal.</li>
-          <li>Advertising and promotion are heavily restricted.</li>
-        </ul>
-        <p class="hint">This is a simplified summary, not legal advice.</p>
-      </section>
-
-      <!-- Vape Law Info Section -->
-      <section id="tab-vapes" class="tab-panel">
-        <h2>Vapes & E‑cigarettes – Key Points (UK)</h2>
-        <ul>
-          <li>No sales to under 18s.</li>
-          <li>Limits on nicotine strength and tank size for nicotine products.</li>
-          <li>Packaging and health warnings required; some ads restricted.</li>
-          <li>Non‑compliant or counterfeit devices/liquids must not be sold.</li>
-        </ul>
-        <p class="hint">Always check the latest local Trading Standards guidance.</p>
-      </section>
-
-      <!-- Privacy Section -->
-      <section id="tab-privacy" class="tab-panel">
-        <h2>Privacy</h2>
-        <p>We collect details you provide (and your IP address) to investigate reports. Photos are optional. We store data securely and may share with relevant authorities where necessary.</p>
-        <p>To request removal or correction of your data, contact: <strong>tradingstandards@example.org</strong></p>
-      </section>
-    </div>
+    <div id="result" class="result" role="status" aria-live="polite"></div>
   </main>
 
   <footer>
     <small>&copy; 2025 Southampton Reporting</small>
   </footer>
 
-  <script src="/script.js"></script>
+  <!-- Defer so it doesn't block render -->
+  <script src="/script.js" defer></script>
 </body>
 </html>

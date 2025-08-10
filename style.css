@@ -23,14 +23,29 @@ header {
   padding: 0 16px;
 }
 
+.tabs { 
+  display: flex; 
+  flex-wrap: wrap; /* allows them to adjust on smaller screens without breaking */
+  gap: 8px; 
+  max-width: 860px; 
+  margin: 12px auto; 
+  padding: 0 16px;
+}
+
 .tab {
   background: var(--card);
   border: 1px solid var(--border);
   color: var(--text);
+  padding: 10px 14px;
+  border-radius: 12px;
+  text-decoration: none;
+  display: inline-block;
+  white-space: nowrap; /* prevents text from breaking inside tabs */
 }
 
 .tab:hover { outline: 2px solid var(--accent-2); }
 .tab.active { outline: 2px solid var(--accent); }
+
 
 main {
   max-width: 860px;

@@ -25,6 +25,7 @@ def get_db():
     conn.row_factory = sqlite3.Row
     return conn
 
+# Create table (new installs)
 with get_db() as conn:
     conn.execute(
         """
@@ -32,6 +33,8 @@ with get_db() as conn:
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT,
             email TEXT,
+            postcode TEXT,
+            shop_name TEXT,
             details TEXT,
             photo_path TEXT,
             created_at TEXT,
@@ -39,14 +42,33 @@ with get_db() as conn:
         )
         """
     )
+    # Light-touch migration for existing DBs missing new columns
+    try:
+        conn.execute("ALTER TABLE reports ADD COLUMN postcode TEXT")
+    except sqlite3.OperationalError:
+        pass
+    try:
+        conn.execute("ALTER TABLE reports ADD COLUMN shop_name TEXT")
+    except sqlite3.OperationalError:
+        pass
 
 # ---------------- Excel helpers ----------------
 def append_to_excel(row: dict):
     """
     Append a row to reports.xlsx, creating it with headers if needed.
-    Columns: created_at, name, email, details, photo_path, ip
+    Columns (order):
+    created_at, name, email, postcode, shop_name, details, photo_path, ip
     """
-    headers = ["created_at", "name", "email", "details", "photo_path", "ip"]
+    headers = [
+        "created_at",
+        "name",
+        "email",
+        "postcode",
+        "shop_name",
+        "details",
+        "photo_path",
+        "ip",
+    ]
 
     if not os.path.exists(EXCEL_PATH):
         wb = Workbook()
@@ -58,13 +80,12 @@ def append_to_excel(row: dict):
     try:
         wb = load_workbook(EXCEL_PATH)
         ws = wb.active
-        # Ensure header row exists (in case file was replaced)
         if ws.max_row == 0:
             ws.append(headers)
         ws.append([row.get(h, "") for h in headers])
         wb.save(EXCEL_PATH)
     except Exception as e:
-        # Don't block API on Excel error; log to console
+        # Don't block API on Excel errors
         print("[append_to_excel] Error:", e)
 
 # ---------------- Static / Frontend routes ----------------
@@ -123,27 +144,31 @@ def where():
 def report():
     """
     Accepts either:
-    - JSON: {name, email, details, photo_base64?}
-    - multipart/form-data: fields name, email, details, and file 'photo'
+    - JSON: {name, email, postcode, shop_name, details, photo_base64?}
+    - multipart/form-data: fields name, email, postcode, shop_name, details, and file 'photo'
     Saves to SQLite and appends to reports.xlsx.
     """
     content_type = request.headers.get("Content-Type", "")
-    name = request.form.get("name") if "multipart/form-data" in content_type else (request.json or {}).get("name")
-    email = request.form.get("email") if "multipart/form-data" in content_type else (request.json or {}).get("email")
-    details = request.form.get("details") if "multipart/form-data" in content_type else (request.json or {}).get("details")
+    is_multipart = "multipart/form-data" in content_type
 
-    # Basic validation (customize as needed)
+    src = request.form if is_multipart else (request.json or {})
+    name = (src.get("name") or "").strip()
+    email = (src.get("email") or "").strip()
+    postcode = (src.get("postcode") or "").strip()
+    shop_name = (src.get("shop_name") or "").strip()
+    details = (src.get("details") or "").strip()
+
+    # Keep validation mild so older clients don't break
     if not name or not email or not details:
         return jsonify(ok=False, error="Missing required fields: name, email, details"), 400
 
-    # Handle optional photo (multipart upload)
+    # Optional photo (multipart upload)
     photo_path = None
-    if "multipart/form-data" in content_type and "photo" in request.files:
+    if is_multipart and "photo" in request.files:
         photo = request.files["photo"]
         if photo and photo.filename:
             ext = os.path.splitext(photo.filename)[1].lower()
             if not ext:
-                # Try to guess from mimetype
                 guessed = mimetypes.guess_extension(photo.mimetype or "")
                 ext = guessed or ".bin"
             fname = f"{uuid4().hex}{ext}"
@@ -158,8 +183,11 @@ def report():
     # Save to DB
     with get_db() as conn:
         conn.execute(
-            "INSERT INTO reports(name,email,details,photo_path,created_at,ip) VALUES (?,?,?,?,?,?)",
-            (name, email, details, photo_path, created_at, ip),
+            """
+            INSERT INTO reports(name,email,postcode,shop_name,details,photo_path,created_at,ip)
+            VALUES (?,?,?,?,?,?,?,?)
+            """,
+            (name, email, postcode, shop_name, details, photo_path, created_at, ip),
         )
 
     # Append to Excel
@@ -167,6 +195,8 @@ def report():
         "created_at": created_at,
         "name": name,
         "email": email,
+        "postcode": postcode,
+        "shop_name": shop_name,
         "details": details,
         "photo_path": photo_path or "",
         "ip": ip or "",

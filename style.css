@@ -1,36 +1,19 @@
 :root {
-  --bg: #ffffff;          /* white base, matches home kit */
-  --card: #f8f8f8;        /* light gray for cards */
-  --text: #111111;        /* near-black text for contrast */
-  --muted: #555555;       /* muted dark gray for secondary text */
-  --accent: #d71920;      /* Southampton primary red */
-  --accent-2: #b5121b;    /* deeper Southampton red for gradient/shadows */
+  --bg: #f5f5f5;          /* soft light gray background */
+  --card: #ffffff;        /* white cards for clean look */
+  --text: #111111;        /* near-black text for high contrast */
+  --muted: #555555;       /* muted gray for secondary text */
+  --accent: #d71920;      /* Southampton red */
+  --accent-2: #b5121b;    /* deep Southampton red */
   --success: #2e8540;     /* green for success */
-  --error: #d71920;       /* same as accent for branding consistency */
-  --border: #cccccc;      /* light border */
+  --error: #d71920;       /* same red for errors */
+  --border: #dddddd;      /* light gray border */
 }
 
 body {
   margin: 0;
   font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji";
-  background: radial-gradient(80% 80% at 50% 0%, #ffffff 0%, #f1f1f1 70%);
-  color: var(--text);
-}
-
-input, textarea {
-  background: #ffffff;
-  border: 1px solid var(--border);
-  color: var(--text);
-}
-
-
-* { box-sizing: border-box; }
-html, body { height: 100%; }
-
-body {
-  margin: 0;
-  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji";
-  background: radial-gradient(80% 80% at 50% 0%, #0b1228 0%, #0f172a 70%);
+  background: var(--bg);
   color: var(--text);
 }
 
@@ -39,20 +22,14 @@ header {
   margin: 24px auto 8px;
   padding: 0 16px;
 }
-h1 { margin: 0 0 4px; font-size: 28px; }
-p { color: var(--muted); }
 
-.tabs { display: flex; gap: 8px; max-width: 860px; margin: 12px auto; padding: 0 16px; }
 .tab {
   background: var(--card);
   border: 1px solid var(--border);
   color: var(--text);
-  padding: 10px 14px;
-  border-radius: 12px;
-  text-decoration: none;
-  display: inline-block;
 }
-.tab:hover { outline: 2px solid #0ea5b5; }
+
+.tab:hover { outline: 2px solid var(--accent-2); }
 .tab.active { outline: 2px solid var(--accent); }
 
 main {
@@ -64,36 +41,17 @@ main {
   padding: 16px;
 }
 
-.card { display: block; }
-
-.grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 12px;
-}
-
-.field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
-.field span { color: var(--muted); font-size: 14px; }
 input, textarea {
-  width: 100%;
-  padding: 10px 12px;
-  border-radius: 10px;
+  background: #ffffff;
   border: 1px solid var(--border);
-  background: #0b1228;
   color: var(--text);
 }
 
-.actions { display: flex; align-items: center; gap: 12px; }
-
 button {
   background: linear-gradient(90deg, var(--accent), var(--accent-2));
-  color: #001015;
-  font-weight: 700;
-  cursor: pointer;
-  border: none;
-  padding: 10px 16px;
-  border-radius: 12px;
+  color: #ffffff;
 }
+
 .hint { color: var(--muted); font-size: 14px; }
 
 .result { margin-top: 8px; font-weight: 600; }

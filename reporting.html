@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Report a Trading Standards Breach</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <header>
+    <h1>Report a Trading Standards Breach</h1>
+    <p>Use this page to report suspected breaches related to tobacco and vaping products.</p>
+  </header>
+
+  <nav class="tabs">
+    <a href="/" class="tab active">Report</a>
+    <a href="/tobacco.html" class="tab">Tobacco Law Info</a>
+    <a href="/vapes.html" class="tab">Vape Law Info</a>
+    <a href="/privacy.html" class="tab">Privacy</a>
+  </nav>
+
+  <main>
+    <form id="reportForm">
+      <div class="field">
+        <label>Your name (optional)</label>
+        <input name="name" placeholder="Jane Doe" />
+      </div>
+
+      <div class="field">
+        <label>Email (optional)</label>
+        <input name="email" type="email" placeholder="jane@example.com" />
+      </div>
+
+      <div class="field">
+        <label>Describe the issue *</label>
+        <textarea name="details" required placeholder="What happened? When and where? Any seller details?"></textarea>
+      </div>
+
+      <div class="field">
+        <label>Photo (optional)</label>
+        <input name="photo" type="file" accept="image/*" />
+      </div>
+
+      <button type="submit">Send report</button>
+      <p class="hint">By submitting, you agree to our Privacy section.</p>
+    </form>
+
+    <div id="result" class="result" role="status" aria-live="polite"></div>
+  </main>
+
+  <footer>
+    <small>&copy; 2025 Southampton Reporting</small>
+  </footer>
+
+  <script src="/script.js" defer></script>
+</body>
+</html>

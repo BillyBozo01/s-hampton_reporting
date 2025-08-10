@@ -32,18 +32,32 @@ with get_db() as conn:
     )
   """)
 
-# --- Serve frontend ---
+# --- Serve frontend (separate pages) ---
 @app.get("/")
 def index():
-  return send_from_directory(FRONTEND_DIR, "index.html")
+    return send_from_directory(FRONTEND_DIR, "index.html")
+
+@app.get("/tobacco.html")
+def tobacco():
+    return send_from_directory(FRONTEND_DIR, "tobacco.html")
+
+@app.get("/vapes.html")
+def vapes():
+    return send_from_directory(FRONTEND_DIR, "vapes.html")
+
+@app.get("/privacy.html")
+def privacy():
+    return send_from_directory(FRONTEND_DIR, "privacy.html")
+
+# Static assets
+@app.get("/style.css")
+def style():
+    return send_from_directory(FRONTEND_DIR, "style.css")
 
 @app.get("/script.js")
 def script():
-  return send_from_directory(FRONTEND_DIR, "script.js")
+    return send_from_directory(FRONTEND_DIR, "script.js")
 
-@app.get("/style.css")
-def style():
-  return send_from_directory(FRONTEND_DIR, "style.css")
 
 # --- Uploads (images only) ---
 ALLOWED_MIME = {"image/jpeg", "image/png", "image/webp", "image/gif"}

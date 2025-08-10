@@ -1,59 +1,36 @@
-import os
-import sqlite3
-import datetime
-import mimetypes
+import os, sqlite3, datetime, mimetypes
 from uuid import uuid4
-from flask import Flask, request, jsonify, send_from_directory
+from flask import Flask, request, jsonify, send_from_directory, Response
 
-# -------------------------------------------------
-# Paths (single-folder layout)
-# -------------------------------------------------
+# ---------------- Paths (single-folder) ----------------
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-FRONTEND_DIR = BASE_DIR                       # HTML/CSS/JS live next to app.py
+FRONTEND_DIR = BASE_DIR            # HTML/CSS/JS next to app.py
 UPLOAD_DIR = os.path.join(BASE_DIR, "uploads")
 DB_PATH = os.path.join(BASE_DIR, "reports.db")
-
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
-# -------------------------------------------------
-# Flask app
-# -------------------------------------------------
-# We’ll serve specific files with send_from_directory below.
+# ---------------- App ----------------
 app = Flask(__name__, static_folder=None)
 
-# -------------------------------------------------
-# Database
-# -------------------------------------------------
-# debugging 
-import os
-from flask import Response, escape
-
-# Where is Flask looking?
+# ---------------- Diagnostics (optional) ----------------
 @app.get("/_where")
 def _where():
     return Response(f"FRONTEND_DIR = {FRONTEND_DIR}", mimetype="text/plain")
 
-# List files Flask can see in that folder (first 200 entries)
 @app.get("/_ls")
 def _ls():
     try:
-        files = sorted(os.listdir(FRONTEND_DIR))[:200]
+        files = sorted(os.listdir(FRONTEND_DIR))[:400]
         lines = [f"{'✓' if os.path.isfile(os.path.join(FRONTEND_DIR, f)) else '✗'}  {f}" for f in files]
-        body = "Listing FRONTEND_DIR:\n" + "\n".join(lines)
-        return Response(body, mimetype="text/plain; charset=utf-8")
+        return Response("Listing FRONTEND_DIR:\n" + "\n".join(lines), mimetype="text/plain; charset=utf-8")
     except Exception as e:
         return Response(f"Error listing dir: {e}", mimetype="text/plain; charset=utf-8")
 
-# Catch-all for your HTML/CSS/JS (put this AFTER /style.css and /script.js)
-@app.get("/<path:filename>")
-def static_pages(filename):
-    path = os.path.join(FRONTEND_DIR, filename)
-    # Debug: show what’s being requested and if it exists
-    print(f"[static_pages] Request: {filename} -> {path} exists={os.path.isfile(path)}")
-    if os.path.isfile(path):
-        return send_from_directory(FRONTEND_DIR, filename)
-    return Response(f"Not found: {filename}\nLooked in: {FRONTEND_DIR}", status=404, mimetype="text/plain")
+print("Serving from:", FRONTEND_DIR)
+for fn in ["reporting.html","tobaccoinfo.html","vapesinfo.html","gdpr.html","style.css","script.js"]:
+    print(f" - {fn} exists:", os.path.exists(os.path.join(FRONTEND_DIR, fn)))
 
+# ---------------- DB ----------------
 def get_db():
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
@@ -61,37 +38,24 @@ def get_db():
 
 with get_db() as conn:
     conn.execute("""
-        CREATE TABLE IF NOT EXISTS reports(
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          name TEXT,
-          email TEXT,
-          details TEXT NOT NULL,
-          photo_path TEXT,
-          created_at TEXT NOT NULL,
-          ip TEXT
-        )
+      CREATE TABLE IF NOT EXISTS reports(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT,
+        email TEXT,
+        details TEXT NOT NULL,
+        photo_path TEXT,
+        created_at TEXT NOT NULL,
+        ip TEXT
+      )
     """)
 
-# -------------------------------------------------
-# Serve frontend pages
-# -------------------------------------------------
+# ---------------- Frontend pages ----------------
 @app.get("/")
-def index():
-    return send_from_directory(FRONTEND_DIR, "index.html")
+def home():
+    # Your home file is reporting.html
+    return send_from_directory(FRONTEND_DIR, "reporting.html")
 
-@app.get("/tobacco.html")
-def tobacco():
-    return send_from_directory(FRONTEND_DIR, "tobaccoinfo.html")
-
-@app.get("/vapes.html")
-def vapes():
-    return send_from_directory(FRONTEND_DIR, "vapesinfo.html")
-
-@app.get("/privacy.html")
-def privacy():
-    return send_from_directory(FRONTEND_DIR, "gdpr.html")
-
-# Static assets
+# Common assets
 @app.get("/style.css")
 def style():
     return send_from_directory(FRONTEND_DIR, "style.css")
@@ -100,20 +64,37 @@ def style():
 def script():
     return send_from_directory(FRONTEND_DIR, "script.js")
 
-# ✅ Catch-all for other frontend files (HTML/CSS/JS in same folder)
+# Pretty URL mappings (optional; keep if your nav uses /tobacco.html etc.)
+@app.get("/tobacco.html")
+def tobacco_pretty():
+    return send_from_directory(FRONTEND_DIR, "tobaccoinfo.html")
+
+@app.get("/vapes.html")
+def vapes_pretty():
+    return send_from_directory(FRONTEND_DIR, "vapesinfo.html")
+
+@app.get("/privacy.html")
+def privacy_pretty():
+    return send_from_directory(FRONTEND_DIR, "gdpr.html")
+
+# Safe catch-all for other frontend files (serve .html/.css/.js directly)
 @app.get("/<path:filename>")
 def static_pages(filename):
-    return send_from_directory(FRONTEND_DIR, filename)
+    low = filename.lower()
+    if not (low.endswith(".html") or low.endswith(".css") or low.endswith(".js")):
+        return "Not found", 404
+    path = os.path.join(FRONTEND_DIR, filename)
+    print(f"[static_pages] {filename} -> {path} exists={os.path.isfile(path)}")
+    if os.path.isfile(path):
+        return send_from_directory(FRONTEND_DIR, filename)
+    return Response(f"Not found: {filename}\nLooked in: {FRONTEND_DIR}", status=404, mimetype="text/plain")
 
-# -------------------------------------------------
-# Uploads (images only, basic checks)
-# -------------------------------------------------
+# ---------------- Uploads (images only) ----------------
 ALLOWED_MIME = {"image/jpeg", "image/png", "image/webp", "image/gif"}
 
 def save_upload(file_storage):
     if not file_storage or not file_storage.filename:
         return None
-    # Quick extension-based guess (not bulletproof, but matches your original)
     guessed = (mimetypes.guess_type(file_storage.filename)[0] or "").lower()
     if guessed and guessed not in ALLOWED_MIME:
         return None
@@ -123,9 +104,7 @@ def save_upload(file_storage):
     file_storage.save(path)
     return path
 
-# -------------------------------------------------
-# API: receive report
-# -------------------------------------------------
+# ---------------- API ----------------
 @app.post("/api/report")
 def report():
     name = (request.form.get("name") or "").strip()
@@ -141,10 +120,7 @@ def report():
         if photo_path is None:
             return jsonify(ok=False, message="Unsupported file type."), 400
 
-    # Explicit UTC with "Z" style timestamp
     created_at = datetime.datetime.now(datetime.timezone.utc).isoformat()
-
-    # Basic IP capture
     ip = request.headers.get("X-Forwarded-For", request.remote_addr)
 
     with get_db() as conn:
@@ -155,32 +131,6 @@ def report():
 
     return jsonify(ok=True, message="Report received. Thank you!")
 
-# -------------------------------------------------
-# Simple read-only admin (optional)
-# -------------------------------------------------
-@app.get("/admin/reports")
-def admin_list():
-    token = request.args.get("token")
-    expected = os.getenv("ADMIN_TOKEN")
-    if not expected or token != expected:
-        return "Forbidden", 403
-    with get_db() as conn:
-        rows = conn.execute(
-            "SELECT id,name,email,details,photo_path,created_at,ip FROM reports ORDER BY id DESC"
-        ).fetchall()
-    lines = []
-    for r in rows:
-        lines.append(
-            f"#{r['id']} | {r['created_at']} | name={r['name'] or '-'} | email={r['email'] or '-'} | ip={r['ip']}\n"
-            f"details: {r['details']}\n"
-            f"photo: {r['photo_path'] or '-'}\n"
-            "----------------------------------------"
-        )
-    return ("\n".join(lines), 200, {"Content-Type": "text/plain; charset=utf-8"})
-
-# -------------------------------------------------
-# Run
-# -------------------------------------------------
+# ---------------- Run ----------------
 if __name__ == "__main__":
-    # Use debug=False for fewer surprises; bind to localhost
     app.run(host="127.0.0.1", port=5000, debug=False)

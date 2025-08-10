@@ -13,47 +13,52 @@
   </header>
 
   <nav class="tabs">
-  <a href="/" class="tab">Report</a>
-  <a href="/tobaccoinfo" class="tab">Tobacco Law Info</a>
-  <a href="/vapesinfo" class="tab">Vape Law Info</a>
-  <a href="/gdpr.html" class="tab">Privacy</a>
-</nav>
-
+    <a href="/reporting.html" class="tab">Report</a>
+    <a href="/tobaccoinfo.html" class="tab">Tobacco Law Info</a>
+    <a href="/vapesinfo.html" class="tab">Vape Law Info</a>
+    <a href="/gdpr.html" class="tab">Privacy</a>
+  </nav>
 
   <main>
-    <form id="reportForm">
-      <div class="field">
-        <label>Your name (optional)</label>
-        <input name="name" placeholder="Jane Doe" />
+    <form id="reportForm" class="card">
+      <div class="grid">
+        <label class="field">
+          <span>Shop name <em>(required)</em></span>
+          <input name="shop_name" id="shop_name" required />
+        </label>
+
+        <label class="field">
+          <span>Postcode <em>(required)</em></span>
+          <input name="postcode" id="postcode" required />
+        </label>
       </div>
 
-      <div class="field">
-        <label>Email (optional)</label>
-        <input name="email" type="email" placeholder="jane@example.com" />
+      <label class="field">
+        <span>Details of the issue <em>(required)</em></span>
+        <textarea name="details" id="details" rows="6" required placeholder="Describe what happened…"></textarea>
+      </label>
+
+      <div class="grid">
+        <label class="field">
+          <span>Your name (optional)</span>
+          <input name="name" id="name" />
+        </label>
+
+        <label class="field">
+          <span>Your email (optional)</span>
+          <input type="email" name="email" id="email" />
+        </label>
       </div>
 
-      <div class="field">
-        <label>postcode *</label>
-        <input name="postcode" required placeholder="Post code?" />
-        </div>  
+      <label class="field">
+        <span>Evidence (optional file/photo)</span>
+        <input type="file" name="evidence" id="evidence" />
+      </label>
 
-        <div class = "field"> 
-          <lable> shop name *</lable> 
-        <input name="shop_name" required placeholder="Name of the shop?" />
-        </div>
-
-      <div class="field">
-        <label>Describe the issue *</label>
-        <textarea name="details" required placeholder="What happened? When and where? Any seller details?"></textarea>
+      <div class="actions">
+        <button type="submit">Send report</button>
+        <p class="hint">By submitting, you agree to our Privacy section.</p>
       </div>
-
-      <div class="field">
-        <label>Photo (optional)</label>
-        <input name="photo" type="file" accept="image/*" />
-      </div>
-
-      <button type="submit">Send report</button>
-      <p class="hint">By submitting, you agree to our Privacy section.</p>
     </form>
 
     <div id="result" class="result" role="status" aria-live="polite"></div>

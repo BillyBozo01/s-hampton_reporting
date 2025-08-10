@@ -1,27 +1,35 @@
-// Highlight the active nav link based on the current URL
-const path = window.location.pathname.replace(/\/+$/, '') || '/';
-document.querySelectorAll('nav.tabs a.tab').forEach(a => {
-  const href = a.getAttribute('href');
-  const isActive = (path === '/' && href === '/') || (path !== '/' && href === path);
-  a.classList.toggle('active', isActive);
-});
+// ---------------- Active tab highlight ----------------
+(function () {
+  const rawPath = window.location.pathname.replace(/\/+$/, '') || '/';
+  const path = rawPath === '/' ? '/reporting.html' : rawPath;
+  document.querySelectorAll('nav.tabs a.tab').forEach(a => {
+    const href = a.getAttribute('href');
+    const isActive = (path === href) || (href === '/reporting.html' && rawPath === '/');
+    a.classList.toggle('active', isActive);
+  });
+})();
 
-// Report form submit (only runs on the report page where the form exists)
-const form = document.getElementById('reportForm');
-const result = document.getElementById('result');
+// ---------------- Report form submit ----------------
+(function () {
+  const form = document.getElementById('reportForm');
+  const result = document.getElementById('result');
+  if (!form || !result) return;
 
-if (form && result) {
   form.addEventListener('submit', async (e) => {
     e.preventDefault();
     result.textContent = 'Sending…';
     result.className = 'result';
 
-    try {
-      const data = new FormData(form);
-      const res = await fetch('/api/report', { method: 'POST', body: data, credentials: 'same-origin' });
-      const json = await res.json();
+    const fd = new FormData(form); // includes files automatically
 
-      if (!json.ok) {
+    try {
+      const res = await fetch('/api/report', {
+        method: 'POST',
+        body: fd
+      });
+      const json = await res.json().catch(() => ({}));
+
+      if (!res.ok || json.ok === false) {
         result.textContent = json.message || 'There was a problem submitting your report.';
         result.className = 'result error';
         return;
@@ -30,9 +38,9 @@ if (form && result) {
       result.textContent = json.message || 'Report received. Thank you!';
       result.className = 'result success';
       form.reset();
-    } catch {
+    } catch (err) {
       result.textContent = 'Network error. Please try again.';
       result.className = 'result error';
     }
   });
-}
+})();

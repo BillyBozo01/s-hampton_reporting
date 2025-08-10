@@ -15,25 +15,30 @@ html, body { height: 100%; }
 
 body {
   margin: 0;
-  background: radial-gradient(1200px 600px at 20% -10%, #0b1222 10%, var(--bg)), var(--bg);
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji";
+  background: radial-gradient(80% 80% at 50% 0%, #0b1228 0%, #0f172a 70%);
   color: var(--text);
-  font: 16px/1.5 system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans";
-  padding: 24px;
 }
 
-header { max-width: 860px; margin: 0 auto 16px; }
-h1 { margin: 0 0 6px; font-size: 28px; }
-p { margin: 0 0 10px; color: var(--muted); }
+header {
+  max-width: 860px;
+  margin: 24px auto 8px;
+  padding: 0 16px;
+}
+h1 { margin: 0 0 4px; font-size: 28px; }
+p { color: var(--muted); }
 
-.tabs { display: flex; gap: 8px; max-width: 860px; margin: 12px auto; }
+.tabs { display: flex; gap: 8px; max-width: 860px; margin: 12px auto; padding: 0 16px; }
 .tab {
   background: var(--card);
   border: 1px solid var(--border);
   color: var(--text);
   padding: 10px 14px;
   border-radius: 12px;
-  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
 }
+.tab:hover { outline: 2px solid #0ea5b5; }
 .tab.active { outline: 2px solid var(--accent); }
 
 main {
@@ -42,30 +47,38 @@ main {
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: 16px;
-  padding: 20px;
+  padding: 16px;
 }
 
-.tab-panel { display: none; }
-.tab-panel.active { display: block; }
+.card { display: block; }
 
-form { display: grid; gap: 12px; }
-.field { display: grid; gap: 6px; }
-label { color: var(--text); }
-input, textarea, button {
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 12px; }
+.field span { color: var(--muted); font-size: 14px; }
+input, textarea {
   width: 100%;
   padding: 10px 12px;
   border-radius: 10px;
   border: 1px solid var(--border);
-  background: #0b1222;
+  background: #0b1228;
   color: var(--text);
 }
-textarea { min-height: 120px; resize: vertical; }
+
+.actions { display: flex; align-items: center; gap: 12px; }
+
 button {
   background: linear-gradient(90deg, var(--accent), var(--accent-2));
   color: #001015;
   font-weight: 700;
   cursor: pointer;
   border: none;
+  padding: 10px 16px;
+  border-radius: 12px;
 }
 .hint { color: var(--muted); font-size: 14px; }
 
@@ -73,4 +86,8 @@ button {
 .result.success { color: var(--success); }
 .result.error { color: var(--error); }
 
-footer { max-width: 860px; margin: 16px auto 0; color: var(--muted); }
+footer { max-width: 860px; margin: 16px auto 0; color: var(--muted); padding: 0 16px; }
+
+@media (max-width: 640px) {
+  .grid { grid-template-columns: 1fr; }
+}

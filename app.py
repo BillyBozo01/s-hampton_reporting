@@ -4,8 +4,8 @@ from flask import Flask, request, jsonify, send_from_directory
 
 # Paths
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-PROJECT_ROOT = os.path.abspath(os.path.join(BASE_DIR, ".."))
-FRONTEND_DIR = os.path.join(PROJECT_ROOT, "frontend")
+FRONTEND_DIR = BASE_DIR  # HTML, CSS, and JS are in the same folder as app.py
+
 UPLOAD_DIR = os.path.join(BASE_DIR, "uploads")
 DB_PATH = os.path.join(BASE_DIR, "reports.db")
 
@@ -32,7 +32,7 @@ with get_db() as conn:
     )
   """)
 
-# --- Serve frontend (separate pages) ---
+# Serve pages
 @app.get("/")
 def index():
     return send_from_directory(FRONTEND_DIR, "index.html")
@@ -49,7 +49,7 @@ def vapes():
 def privacy():
     return send_from_directory(FRONTEND_DIR, "privacy.html")
 
-# Static assets
+# Serve static files
 @app.get("/style.css")
 def style():
     return send_from_directory(FRONTEND_DIR, "style.css")
@@ -57,6 +57,7 @@ def style():
 @app.get("/script.js")
 def script():
     return send_from_directory(FRONTEND_DIR, "script.js")
+
 
 
 # --- Uploads (images only) ---

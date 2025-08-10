@@ -51,15 +51,15 @@ def index():
 
 @app.get("/tobacco.html")
 def tobacco():
-    return send_from_directory(FRONTEND_DIR, "tobacco.html")
+    return send_from_directory(FRONTEND_DIR, "tobaccoinfo.html")
 
 @app.get("/vapes.html")
 def vapes():
-    return send_from_directory(FRONTEND_DIR, "vapes.html")
+    return send_from_directory(FRONTEND_DIR, "vapesinfo.html")
 
 @app.get("/privacy.html")
 def privacy():
-    return send_from_directory(FRONTEND_DIR, "privacy.html")
+    return send_from_directory(FRONTEND_DIR, "gdpr.html")
 
 # Static assets
 @app.get("/style.css")

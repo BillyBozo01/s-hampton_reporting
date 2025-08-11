@@ -34,6 +34,21 @@
       </div>
 
       <label class="field">
+  <span>Type of breach <em>(required)</em></span>
+  <select name="details" id="details" required>
+    <option value="" disabled selected>Select an issue…</option>
+    <option value="underage-sale">Underage sale</option>
+    <option value="improper-advertising">Improper advertising</option>
+    <option value="missing-uk-duty">Missing UK duty</option>
+    <option value="oversized-vape">Oversized vape</option>
+    <option value="disposable-vape">Disposable vape</option>
+    <option value="too-much-nicotine">Too much nicotine</option>
+    <option value="non-compliant-packaging">Non-compliant packaging</option>
+    <option value="other">Other</option>
+  </select>
+</label>
+
+      <label class="field">
         <span>Details of the issue <em>(required)</em></span>
         <textarea name="details" id="details" rows="6" required placeholder="Describe what happened…"></textarea>
       </label>
